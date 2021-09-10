@@ -1,4 +1,3 @@
-
 kaboom({
   global: true,
   fullscreen: true,
@@ -7,14 +6,18 @@ kaboom({
   clearColor: [0, 0, 0, 1],
 })
 
+//  velocidad
+
 const MOVE_SPEED = 120
 const JUMP_FORCE = 360
 const BIG_JUMP_FORCE = 550
 let CURRENT_JUMP_FORCE = JUMP_FORCE
-let isJumping = true
 const FALL_DEATH = 400
 const ENEMY_SPEED = 20
 
+// logica del juego
+
+let isJumping = true
 
 loadRoot('https://i.imgur.com/')
 loadSprite('coin', 'wbKxhcd.png')
@@ -29,6 +32,7 @@ loadSprite('pipe-top-left', 'ReTPiWY.png')
 loadSprite('pipe-top-right', 'hj2GK4n.png')
 loadSprite('pipe-bottom-left', 'c1cYSbt.png')
 loadSprite('pipe-bottom-right', 'nqQ79eI.png')
+
 loadSprite('blue-block', 'fVscIbn.png')
 loadSprite('blue-brick', '3e5YRQd.png')
 loadSprite('blue-steel', 'gqVoI2b.png')
@@ -100,9 +104,7 @@ scene("game", ({ level, score }) => {
     }
   ])
 
-
   add([text('level ' + parseInt(level + 1)), pos(40, 6)])
-
 
   function big() {
     let timer = 0
@@ -111,7 +113,6 @@ scene("game", ({ level, score }) => {
       update() {
         if (isBig) {
           CURRENT_JUMP_FORCE = BIG_JUMP_FORCE
-
           timer -= dt()
           if (timer <= 0) {
             this.smallify()
@@ -138,17 +139,14 @@ scene("game", ({ level, score }) => {
   const player = add([
     sprite('mario'), solid(),
     pos(30, 0),
-
     body(),
     big(),
     origin('bot')
   ])
 
-
   action('mushroom', (m) => {
     m.move(20, 0)
   })
-
 
   player.on("headbump", (obj) => {
     if (obj.is('coin-surprise')) {
@@ -156,7 +154,6 @@ scene("game", ({ level, score }) => {
       destroy(obj)
       gameLevel.spawn('}', obj.gridPos.sub(0, 0))
     }
-
     if (obj.is('mushroom-surprise')) {
       gameLevel.spawn('#', obj.gridPos.sub(0, 1))
       destroy(obj)
@@ -164,9 +161,7 @@ scene("game", ({ level, score }) => {
     }
   })
 
-
   player.collides('mushroom', (m) => {
-
     destroy(m)
     player.biggify(6)
   })
@@ -177,12 +172,9 @@ scene("game", ({ level, score }) => {
     scoreLabel.text = scoreLabel.value
   })
 
-
-
   action('dangerous', (d) => {
     d.move(-ENEMY_SPEED, 0)
   })
-
 
   player.collides('dangerous', (d) => {
     if (isJumping) {
@@ -199,11 +191,9 @@ scene("game", ({ level, score }) => {
     }
   })
 
-
   player.collides('pipe', () => {
     keyPress('down', () => {
       go('game', {
-
         level: (level + 1) % maps.length,
         score: scoreLabel.value
       })
@@ -217,7 +207,6 @@ scene("game", ({ level, score }) => {
   keyDown('right', () => {
     player.move(MOVE_SPEED, 0)
   })
-
 
   player.action(() => {
     if (player.grounded()) {
